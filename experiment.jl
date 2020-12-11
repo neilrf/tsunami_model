@@ -1,5 +1,6 @@
 # setup function for tsunami modelling
 using Plots, ColorSchemes
+using GaussianRandomFields
 plotly()
 
 include("setup.jl")
@@ -46,8 +47,16 @@ total_time = 2000
                 
 boundary_m = boundary_conditions(boundary_size, x_size, y_size, boundary_damping)
 height_m = initial_height(x_size, y_size, dx, dy, initial_spread)
-x_vel_m = zeros(y_size, x_size)
-y_vel_m = zeros(y_size, x_size)
+# height_m = sample(grf)
+# x_vel_m = zeros(y_size, x_size)
+# y_vel_m = zeros(y_size, x_size)
+cov = CovarianceFunction(2, Matern(1/4, 3/4))
+pts = range(0, stop=1, length=300)
+grf = GaussianRandomField(cov, CirculantEmbedding(), pts, pts)
+x_vel_m = sample(grf)/40
+y_vel_m = sample(grf)/40
+
+heatmap(height_m)
 
 height_snapshots = Array{Float64}[]
 for i in 1:total_time
@@ -68,11 +77,21 @@ end
 anim = @animate for i in 1:size(height_snapshots)[1]
     heatmap(height_snapshots[i], clim=(-0.3, 0.3), c=cgrad([:blue, :white, :orange]))
 end
-gif(anim, "heatmap.gif", fps = 15)
+gif(anim, "heatmap_grf_initial_cond_random_process.gif", fps = 15)
 
 # surface plot over time saved as gif
 anim = @animate for i in 1:size(height_snapshots)[1]
-    plot(height_snapshots[i], zlims=(-0.3,0.3), st=:surface, clim=(-0.3, 0.3), legend = :none, c=cgrad([:green, :blue, :red]))
+    plot(height_snapshots[i], zlims=(-0.3,0.3), st=:surface, clim=(-0.3, 0.3), legend = :none, c=cgrad([:red, :aqua, :blue]))
 end
-gif(anim, "surface.gif", fps = 10)
+gif(anim, "surface_grf_initial_cond_random_process.gif", fps = 15)
+
+cov = CovarianceFunction(2, Matern(1/4, 3/4))
+
+pts = range(0, stop=1, length=300)
+
+grf = GaussianRandomField(cov, CirculantEmbedding(), pts, pts)
+
+sample(grf)
+
+
 
