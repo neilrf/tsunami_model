@@ -1,21 +1,3 @@
-function coord_to_1d(z, n_x, n_y)
-    return z[2]*n_y - n_x + z[1]
-end
-
-function coord_to_2d(z, n_y)
-    y = ceil(Int,z/n_y)
-    x = mod(z, n_y)
-    return (x,y)
-end
-
-# function A(station_locations, n_x, n_y)
-#     output= zeros(length(station_locations), n_x*n_y)
-#     for i in 1:length(station_locations)
-#         output[i, coord_to_1d(station_locations[i], n_x, n_y)] = 1
-#     end
-#     return output
-# end
-
 
 function normalise_log_weights(log_weights)
     max_weight = maximum(log_weights)
