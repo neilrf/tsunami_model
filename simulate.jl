@@ -1,9 +1,4 @@
 # functions to simulate tsunami
-using GaussianRandomFields
-
-cov = CovarianceFunction(2, Matern(1/4, 3/4))
-pts = range(0, stop=1, length=300)
-grf = GaussianRandomField(cov, CirculantEmbedding(), pts, pts)
 
 function timestep(height_m, x_vel_m, y_vel_m, dx, dy, dt, depth_m, boundary_m, grav)
     
@@ -58,9 +53,6 @@ function timestep(height_m, x_vel_m, y_vel_m, dx, dy, dt, depth_m, boundary_m, g
             new_height_m[i,j] = (height_m[i,j] - (vel_dx[i,j] + vel_dy[i,j])*dt) * boundary_m[i,j]
         end
     end
-    
-    
-    
-    return new_x_vel_m + sample(grf)/500, new_y_vel_m + sample(grf)/500, new_height_m + sample(grf)/500
-    # return new_x_vel_m, new_y_vel_m, new_height_m
+
+    return new_x_vel_m, new_y_vel_m, new_height_m
 end

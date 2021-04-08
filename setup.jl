@@ -1,5 +1,5 @@
 #functions for setup of tsunami model
-using GaussianRandomFields
+# using GaussianRandomFields
 function boundary_conditions(boundary_size, x_size, y_size, damping)
     boundary_m = ones(y_size, x_size)
     for i in 1:y_size
@@ -19,9 +19,9 @@ end
 
 
 function initial_height(x_size, y_size, dx, dy, spread)
-    cov = CovarianceFunction(2, Matern(1/4, 3/4))
-    pts = range(0, stop=1, length=300)
-    grf = GaussianRandomField(cov, CirculantEmbedding(), pts, pts)
+    # cov = CovarianceFunction(2, Matern(1/4, 3/4))
+    # pts = range(0, stop=1, length=300)
+    # grf = GaussianRandomField(cov, CirculantEmbedding(), pts, pts)
     
     height_m = zeros(y_size, x_size)
     
@@ -44,6 +44,6 @@ function initial_height(x_size, y_size, dx, dy, spread)
             height_m[i,j] = hy * hx
         end
     end
-    return height_m + sample(grf)/20
-    # return height_m
+    # return height_m + sample(grf)/20
+    return height_m
 end
